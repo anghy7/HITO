@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HITO - Tienda Online</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="icon" type="image/png" href="./imagenes/tu-favicon.ico">
+    <style>
+        /* Variables de color para un estilo consistente */
+        :root {
+            --primary-orange: #FF6B35;
+            --secondary-orange: #FF8C42;
+            --primary-navy: #1A365D;
+            --light-bg: #F3F4F6;
+        }
+        
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--primary-navy);
+            background: linear-gradient(to bottom right, #1A365D, #FF6B35);
+            background-attachment: fixed;
+        }
+
+        /* Estilos del botón flotante de WhatsApp */
+        .whatsapp-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 40px;
+            right: 40px;
+            background-color: #25d366;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            background-color: #128C7E;
+        }
+        
+        /* Estilos para las tarjetas de producto */
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        /* Insignia del carrito */
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--primary-orange);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Botón de acción principal */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-orange) 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+        
+        /* Botón de WhatsApp */
+        .btn-whatsapp {
+            background-color: #25d366;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-whatsapp:hover {
+            background-color: #128C7E;
+            transform: translateY(-2px);
+        }
+
+        /* Animación de entrada para el modal */
+        .modal-enter {
+            animation: slideIn 0.3s ease-out forwards;
+        }
+
+        .modal-leave {
+            animation: slideOut 0.3s ease-in forwards;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); }
+            to { transform: translateX(100%); }
+        }
+
+        /* Estilos específicos para la sección Hero */
+        .hero-section {
+            background-image: url('./imagenes/portada/carousel-2.jpg');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(26, 54, 93, 0.6);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-[#1A365D] to-[#FF6B35]">
+    <a href="https://wa.me/59168686808?text=Hola!%20Estoy%20interesado%20en%20sus%20productos"
+        class="whatsapp-float"
+        target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <header class="bg-white/80 backdrop-blur-sm shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <img src="C:\Users\User\Desktop\paginaweb\PAGINA DE DANNA WEB\imagenes\portada\logo.jpg" alt="Logo de HITO" class="w-12 h-12 object-contain rounded-full">
+                <span class="ml-3 text-2xl font-bold text-[var(--primary-navy)]">HITO</span>
+            </div>
+            
+            <nav class="hidden md:flex space-x-8">
+                <a href="#inicio" class="text-[var(--primary-navy)] hover:text-[var(--primary-orange)] font-medium">Inicio</a>
+                <a href="#productos" class="text-[var(--primary-navy)] hover:text-[var(--primary-orange)] font-medium">Productos</a>
+                <a href="#nosotros" class="text-[var(--primary-navy)] hover:text-[var(--primary-orange)] font-medium">Nosotros</a>
+                <a href="#contacto" class="text-[var(--primary-navy)] hover:text-[var(--primary-orange)] font-medium">Contacto</a>
+            </nav>
+            
+            <div class="relative">
+                <button id="cart-btn" class="text-[var(--primary-navy)] hover:text-[var(--primary-orange)] text-2xl">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count" class="cart-badge">0</span>
+                </button>
+            </div>
+
+            <button id="menu-toggle" class="md:hidden text-[var(--primary-navy)] text-2xl focus:outline-none">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <div id="mobile-menu" class="hidden md:hidden bg-white/80 backdrop-blur-sm px-4 pb-4 shadow-lg">
+            <nav class="flex flex-col space-y-4">
+                <a href="#inicio" class="text-[var(--primary-navy)] hover:text-[var(--primary-orange)] font-medium py-2">Inicio</a>
+                <a href="#productos" class="text-[var(--primary-navy)] hover:text-[var(--primary-orange)] font-medium py-2">Productos</a>
+                <a href="#nosotros" class="text-[var(--primary-navy)] hover:text-[var(--primary-orange)] font-medium py-2">Nosotros</a>
+                <a href="#contacto" class="text-[var(--primary-navy)] hover:text-[var(--primary-orange)] font-medium py-2">Contacto</a>
+            </nav>
+        </div>
+    </header>
+
+    <section id="inicio" class="hero-section relative min-h-screen flex items-center justify-center text-white">
+        <div class="hero-overlay"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="text-center md:text-left md:w-1/2 mb-8 md:mb-0">
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-4 drop-shadow-md">
+                        Encuentra tu Estilo Único
+                    </h1>
+                    <p class="text-lg sm:text-xl font-light max-w-2xl mx-auto md:mx-0 mb-8">
+                        Explora nuestra colección de poleras y pines, diseñados para los que se atreven a ser diferentes.
+                    </p>
+                    <a href="#productos"
+                        class="btn-primary text-white px-8 py-4 rounded-full font-semibold text-lg inline-block shadow-lg">
+                        Ver Colección
+                    </a>
+                </div>
+                <div class="md:w-2x1 flex justify-center mt-20 md:mt-0">
+                    <img src="C:\Users\User\Desktop\paginaweb\PAGINA DE DANNA WEB\imagenes\portada\carousel-2.jpg" alt="Imagen Hero" class="rounded-lg shadow-lg max-w-2xl w-full h-auto object-cover" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    ---
+
+    <section id="productos" class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-white mb-12 drop-shadow-md">Nuestros Productos</h2>
+            
+            <div class="mb-16">
+                <h3 class="text-2xl font-semibold text-[var(--primary-orange)] mb-8 text-center drop-shadow-md">Poleras</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="product-card rounded-lg shadow-md overflow-hidden">
+                        <div class="h-64 overflow-hidden">
+                            <img src="C:\Users\User\Desktop\paginaweb\PAGINA DE DANNA WEB\imagenes\portada\polera2.jpg" alt="Polera básica de algodón premium" class="w-full h-full object-cover" />
+                        </div>
+                        <div class="p-6">
+                            <h4 class="text-xl font-semibold text-[var(--primary-navy)] mb-2">Polera Talla S</h4>
+                            <p class="text-gray-600 mb-4">Algodón 100%,Diseño que resalta! Ideal si buscas un ajuste más ceñido. Perfecta para quienes prefieren la ropa a la medida.</p>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-2xl font-bold text-[var(--primary-orange)]">Bs 55</span>
+                                <div class="flex items-center space-x-2">
+                                    <button class="text-gray-400 hover:text-[var(--primary-orange)]" onclick="decreaseQuantity(1)">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <span id="quantity-1" class="font-semibold">1</span>
+                                    <button class="text-gray-400 hover:text-[var(--primary-orange)]" onclick="increaseQuantity(1)">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button onclick="addToCart(1, 'Polera Talla S', 55)" class="w-full bg-[var(--primary-navy)] text-white py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-colors">
+                                Agregar al Carrito
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="product-card rounded-lg shadow-md overflow-hidden">
+                        <div class="h-64 overflow-hidden">
+                            <img src="C:\Users\User\Desktop\paginaweb\PAGINA DE DANNA WEB\imagenes\portada\polera1.jpg" alt="Polera con estampado artístico" class="w-full h-full object-cover" />
+                        </div>
+                        <div class="p-6">
+                            <h4 class="text-xl font-semibold text-[var(--primary-navy)] mb-2"> Polera Talla M</h4>
+                            <p class="text-gray-600 mb-4">El balance perfecto,La talla más popular, cómoda y versátil, estampado de alta calidad que perdura.</p>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-2xl font-bold text-[var(--primary-orange)]">Bs 60</span>
+                                <div class="flex items-center space-x-2">
+                                    <button class="text-gray-400 hover:text-[var(--primary-orange)]" onclick="decreaseQuantity(2)">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <span id="quantity-2" class="font-semibold">1</span>
+                                    <button class="text-gray-400 hover:text-[var(--primary-orange)]" onclick="increaseQuantity(2)">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button onclick="addToCart(2, 'Polera Talla M', 60)" class="w-full bg-[var(--primary-navy)] text-white py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-colors">
+                                Agregar al Carrito
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="product-card rounded-lg shadow-md overflow-hidden">
+                        <div class="h-64 overflow-hidden">
+                            <img src="C:\Users\User\Desktop\paginaweb\PAGINA DE DANNA WEB\imagenes\portada\product-5.webp" alt="Polera oversize con capucha" class="w-full h-full object-cover" />
+                        </div>
+                        <div class="p-6">
+                            <h4 class="text-xl font-semibold text-[var(--primary-navy)] mb-2">Polera Talla L</h4>
+                            <p class="text-gray-600 mb-4">Comodidad ante todo. Perfecta para quienes prefieren un ajuste más relajado y suelto. ¡Máxima libertad de movimiento!,Perfecta para el día a día.</p>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-2xl font-bold text-[var(--primary-orange)]">Bs 70</span>
+                                <div class="flex items-center space-x-2">
+                                    <button class="text-gray-400 hover:text-[var(--primary-orange)]" onclick="decreaseQuantity(3)">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <span id="quantity-3" class="font-semibold">1</span>
+                                    <button class="text-gray-400 hover:text-[var(--primary-orange)]" onclick="increaseQuantity(3)">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button onclick="addToCart(3, 'Polera Talla L', 70)" class="w-full bg-[var(--primary-navy)] text-white py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-colors">
+                                Agregar al Carrito
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-2xl font-semibold text-[var(--primary-orange)] mb-8 text-center drop-shadow-md">Pines</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="product-card rounded-lg shadow-md overflow-hidden">
+                        <div class="h-64 overflow-hidden flex items-center justify-center bg-white/50 backdrop-blur-sm">
+                            <img src="C:\Users\User\Desktop\paginaweb\PAGINA DE DANNA WEB\imagenes\portada\pin muestra bicentenario.jpg" alt="Pin geométrico moderno" class="w-48 h-48 object-contain" />
+                        </div>
+                        <div class="p-6">
+                            <h4 class="text-xl font-semibold text-[var(--primary-navy)] mb-2">Pin del bicentenario</h4>
+                            <p class="text-gray-600 mb-4">Lleva contigo un pedazo con este pin único! Perfecto para tu mochila, chaqueta, gorra o bolso, este accesorio es ideal para mostrar tu identidad y orgullo.</p>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-2xl font-bold text-[var(--primary-orange)]">Bs 10</span>
+                                <div class="flex items-center space-x-2">
+                                    <button class="text-gray-400 hover:text-[var(--primary-orange)]" onclick="decreaseQuantity(4)">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <span id="quantity-4" class="font-semibold">1</span>
+                                    <button class="text-gray-400 hover:text-[var(--primary-orange)]" onclick="increaseQuantity(4)">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button onclick="addToCart(4, 'Pin del bicentenario', 10)" class="w-full bg-[var(--primary-navy)] text-white py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-colors">
+                                Agregar al Carrito
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="product-card rounded-lg shadow-md overflow-hidden">
+                        <div class="h-64 overflow-hidden flex items-center justify-center bg-white/50 backdrop-blur-sm">
+                            <img src="C:\Users\User\Desktop\paginaweb\PAGINA DE DANNA WEB\imagenes\portada\pindocena.png" alt="Pin vintage retro" class="w-40 h-33 object-contain" />
+                        </div>
+                        <div class="p-6">
+                            <h4 class="text-xl font-semibold text-[var(--primary-navy)] mb-2"> ¡Promoción por docena!</h4>
+                            <p class="text-gray-600 mb-4">Compra 12 pines y cada uno te sale a solo 9 Bs. ¡Ideal para tus amigos o para regalar!</p>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-2xl font-bold text-[var(--primary-orange)]">108</span>
+                                <div class="flex items-center space-x-2">
+                                    <button class="text-gray-400 hover:text-[var(--primary-orange)]" onclick="decreaseQuantity(5)">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <span id="quantity-5" class="font-semibold">1</span>
+                                    <button class="text-gray-400 hover:text-[var(--primary-orange)]" onclick="increaseQuantity(5)">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button onclick="addToCart(5, 'Docena de Pines', 108)" class="w-full bg-[var(--primary-navy)] text-white py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-colors">
+                                Agregar al Carrito
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="product-card rounded-lg shadow-md overflow-hidden">
+                        <div class="h-64 overflow-hidden flex items-center justify-center bg-white/50 backdrop-blur-sm">
+                            <img src="C:\Users\User\Desktop\paginaweb\PAGINA DE DANNA WEB\imagenes\portada\pinfull.jpg" alt="Pin personalizado" class="w-48 h-49 object-contain" />
+                        </div>
+                        <div class="p-6">
+                            <h4 class="text-xl font-semibold text-[var(--primary-navy)] mb-2">¿Quieres el mejor precio?</h4>
+                            <p class="text-gray-600 mb-4">¡Lleva más de 12 unidades y cada pin te sale a solo 8 Bs.!</p>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-2xl font-bold text-[var(--primary-orange)]">Bs 192</span>
+                                <div class="flex items-center space-x-2">
+                                    <button class="text-gray-400 hover:text-[var(--primary-orange)]" onclick="decreaseQuantity(6)">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <span id="quantity-6" class="font-semibold">1</span>
+                                    <button class="text-gray-400 hover:text-[var(--primary-orange)]" onclick="increaseQuantity(6)">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button onclick="addToCart(6, '24 Pines', 192)" class="w-full bg-[var(--primary-navy)] text-white py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-colors">
+                                Agregar al Carrito
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    ---
+
+    <section id="nosotros" class="py-16">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-white mb-4 drop-shadow-md">Sobre Nosotros</h2>
+                <p class="text-xl text-white/90 max-w-3xl mx-auto">
+                    Cada diseño es un homenaje a nuestra historia, una forma de llevar el arte y la cultura en la piel,Creemos que cada generación deja su propio HITO.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center p-6 rounded-lg shadow-md bg-white/80 backdrop-blur-sm transition-all duration-300 hover:shadow-xl hover:scale-105">
+                    <div class="w-20 h-20 bg-gradient-to-br from-[var(--primary-orange)] to-[var(--secondary-orange)] rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-[var(--primary-navy)] mb-2">VISION</h3>
+                    <p class="text-gray-600">Convertirnos en la marca con un muy buen posicionamiento en Bolivia, que conecta a las nuevas generaciones con su cultura a través de productos personalizados que celebran la identidad nacional.</p>
+                </div>
+                
+                <div class="text-center p-6 rounded-lg shadow-md bg-white/80 backdrop-blur-sm transition-all duration-300 hover:shadow-xl hover:scale-105">
+                    <div class="w-20 h-20 bg-gradient-to-br from-[var(--primary-navy)] to-[#2B5689] rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-[var(--primary-navy)] mb-2">MISION</h3>
+                    <p class="text-gray-600">Ofrecer productos personalizados que permitan a los jóvenes sentirse identificados con su cultura y tradiciones, promoviendo la unidad y el orgullo boliviano durante fechas festivas.</p>
+                </div>
+                
+                <div class="text-center p-6 rounded-lg shadow-md bg-white/80 backdrop-blur-sm transition-all duration-300 hover:shadow-xl hover:scale-105">
+                    <div class="w-20 h-20 bg-gradient-to-br from-[var(--primary-orange)] to-[var(--secondary-orange)] rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-[var(--primary-navy)] mb-2">CULTURA</h3>
+                    <p class="text-gray-600">HITO celebra la identidad boliviana, basada en: Respeto por nuestra historia y símbolos culturales,Expresión artística con raíces ancestrales,Orgullo generacional y conexión con el patrimonio,Inclusividad y diversidad cultural,Pasión por lo hecho en Bolivia, con diseño auténtico</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    ---
+
+    <div id="cart-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-[100]">
+        <div class="absolute right-0 top-0 h-full w-full md:w-96 bg-white/90 backdrop-blur-sm shadow-lg overflow-y-auto modal-enter">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-[var(--primary-navy)]">Tu Carrito</h3>
+                    <button onclick="closeCart()" class="text-gray-400 hover:text-[var(--primary-orange)] text-2xl">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div id="cart-items" class="mb-6">
+                </div>
+                
+                <div class="border-t pt-4 mb-6">
+                    <div class="flex justify-between items-center text-xl font-semibold">
+                        <span>Total:</span>
+                        <span id="cart-total">Bs 0</span>
+                    </div>
+                </div>
+                
+                <button onclick="checkout()" class="btn-whatsapp w-full text-white py-4 rounded-lg font-semibold text-lg">
+                    <i class="fab fa-whatsapp mr-2"></i>
+                    Comprar por WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    ---
+
+    <footer id="contacto" class="bg-black/40 backdrop-blur-sm text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">HITO</h3>
+                    <p class="text-gray-300">Expresa tu estilo con nuestros productos únicos y de calidad.</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Contacto</h3>
+                    <p class="text-gray-300 mb-2">
+                        <i class="fas fa-phone mr-2"></i>+591 68686808
+                    </p>
+                    
+                    <p class="text-gray-300">
+                        <i class="fas fa-map-marker-alt mr-2"></i>Chuquisaca, Sucre
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Síguenos</h3>
+                    <div class="flex space-x-4">
+                        <a href="https://www.instagram.com/hito_ecom_bolivia?igsh=MWhvZm1qbmY5MjJpdg=" target="_blank" class="text-gray-300 hover:text-[var(--primary-orange)] text-2xl">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.facebook.com/profile.php?id=61579071593098&rdid=fWecbM0Usf5gVvXX&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1GVtumPtnr%2F" target="_blank" class="text-gray-300 hover:text-[var(--primary-orange)] text-2xl">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="https://www.tiktok.com/@hito_ecom_bolivia?_t=ZM-8yT99bIITG1&_r=1" target="_blank" class="text-gray-300 hover:text-[var(--primary-orange)] text-2xl">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700/50 mt-8 pt-8 text-center text-gray-300">
+                <p>&copy; 2025 Anghy Design. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let cart = [];
+        const phoneNumber = '59168686808';
+
+        function addToCart(id, name, price) {
+            const quantityElement = document.getElementById(`quantity-${id}`);
+            if (!quantityElement) {
+                console.error(`Element with id 'quantity-${id}' not found.`);
+                return;
+            }
+            const quantity = parseInt(quantityElement.textContent);
+            const existingItem = cart.find(item => item.id === id);
+
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({ id, name, price, quantity });
+            }
+
+            updateCartCount();
+            showNotification('Producto agregado al carrito! ✅');
+
+            // Reinicia la cantidad en la tarjeta del producto
+            quantityElement.textContent = '1';
+        }
+
+        function increaseQuantity(id) {
+            const element = document.getElementById(`quantity-${id}`);
+            if (element) {
+                element.textContent = parseInt(element.textContent) + 1;
+            }
+        }
+
+        function decreaseQuantity(id) {
+            const element = document.getElementById(`quantity-${id}`);
+            if (element && parseInt(element.textContent) > 1) {
+                element.textContent = parseInt(element.textContent) - 1;
+            }
+        }
+        
+        // Función para eliminar un producto del carrito
+        function removeItem(id) {
+            cart = cart.filter(item => item.id !== id);
+            updateCartCount();
+            showCart(); // Actualiza el modal del carrito para mostrar los cambios
+            showNotification('Producto eliminado del carrito! 🗑️');
+        }
+
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cart-count').textContent = count;
+        }
+
+        function showCart() {
+            const modal = document.getElementById('cart-modal');
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p class="text-gray-500 text-center py-8">Tu carrito está vacío</p>';
+                cartTotal.textContent = 'Bs 0';
+            } else {
+                cartItems.innerHTML = cart.map(item => `
+                    <div class="flex items-center justify-between mb-4 p-3 bg-gray-50 rounded-lg">
+                        <div class="flex-grow">
+                            <h4 class="font-semibold">${item.name}</h4>
+                            <p class="text-sm text-gray-600">${item.quantity} x Bs ${item.price}</p>
+                        </div>
+                        <span class="font-bold mr-4">Bs ${item.price * item.quantity}</span>
+                        <button onclick="removeItem(${item.id})" class="text-red-500 hover:text-red-700 transition-colors">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                `).join('');
+
+                const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                cartTotal.textContent = `Bs ${total}`;
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeCart() {
+            document.getElementById('cart-modal').classList.add('hidden');
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                showNotification('Agrega productos al carrito primero!');
+                return;
+            }
+
+            const orderDetails = cart.map(item => {
+                return `* ${item.name}: ${item.quantity} unidades - Bs ${item.price * item.quantity}`;
+            }).join('\n');
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const message = `¡Hola! Me gustaría hacer un pedido:\n\n${orderDetails}\n\n*Total a pagar: Bs ${total}*`;
+
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            
+            // Opcional: limpiar el carrito después de la compra
+            cart = [];
+            updateCartCount();
+            closeCart();
+        }
+        
+        // Función de notificación
+        function showNotification(message) {
+          const notification = document.createElement('div');
+          notification.textContent = message;
+          notification.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #1A365D;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1000;
+            opacity: 0;
+            animation: fadein 0.5s forwards, fadeout 0.5s 2.5s forwards;
+          `;
+          document.body.appendChild(notification);
+          
+          setTimeout(() => {
+            if (document.body.contains(notification)) {
+                document.body.removeChild(notification);
+            }
+          }, 3000);
+        }
+        
+        // Animación CSS para la notificación
+        const styleSheet = document.createElement("style");
+        styleSheet.innerHTML = `@keyframes fadein { from { opacity: 0; } to { opacity: 1; } } @keyframes fadeout { from { opacity: 1; } to { opacity: 0; } }`;
+        document.head.appendChild(styleSheet);
+
+
+        // Event Listeners
+        document.getElementById('cart-btn').addEventListener('click', showCart);
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        document.getElementById('cart-modal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeCart();
+            }
+        });
+
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 0) {
+                header.classList.add('shadow-lg');
+            } else {
+                header.classList.remove('shadow-lg');
+            }
+        });
+    </script>
+</body>
+</html>
